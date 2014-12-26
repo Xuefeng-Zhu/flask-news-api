@@ -20,7 +20,7 @@ db.init_app(app)
 redis_store.init_app(app)
 
 api = Api(app)
-api.decorators=[cors.crossdomain(origin='*', methods=['GET', 'POST', 'PUT', 'OPTIONS'])]
+api.decorators=[cors.crossdomain(origin='*', headers='my-header, accept, content-type')]
 
 api.add_resource(NewsAPI, '/news')
 

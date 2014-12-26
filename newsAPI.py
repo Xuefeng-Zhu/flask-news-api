@@ -29,6 +29,9 @@ newsParser.add_argument('news_pic', type=str)
 newsParser.add_argument('content')
 
 class NewsAPI(Resource):
+    def options(self):
+        pass
+
     def get(self):
         pass
 
@@ -44,6 +47,8 @@ class NewsAPI(Resource):
             abort(400)
 
         news =  News(title=title, abstract=abstract, news_pic=news_pic, content=content)
+        news.save()
+
         result = {}
         for key in news:
             if key == 'id':
