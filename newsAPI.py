@@ -4,6 +4,7 @@ from model.redis import redis_store
 from model.news import News
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
+import boto
 
 
 SECRET_KEY = 'flask is cool'
@@ -58,4 +59,25 @@ class NewsAPI(Resource):
             else:
                 result[key] = news[key]
         return result
+
+class NewsImageAPI(Resource):
+    def options(self):
+        pass
+
+    def post(self):
+        # verify token 
+        # if token is None:
+        #     abort(400)
+        # email = verify_auth_token(token) 
+        # if email is None:
+        #     abort(400)
+
+        uploaded_file = request.files['file']
+
+        conn = boto.connect_s3('AKIAI6Y5TYNOTCIHK63Q', 'mmIpQx6mX/oFjZC6snQ7anO0yTOhEbpqPf2pcr0E')
+        bucket = conn.get_bucket('news-pic')
+        key = bucket.new_key(uploaded_file.filename)
+        key.set_contents_from_file(uploaded_file)
+
+        return {'url': 'https://s3.amazonaws.com/news-pic/%s' %uploaded_file.filename}
 
