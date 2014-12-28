@@ -3,7 +3,7 @@ from flask.ext.restful import Resource, Api
 from flask.ext.restful.utils import cors
 from model.user import db
 from model.redis import redis_store
-from newsAPI import NewsAPI, NewsImageAPI
+from newsAPI import NewsAPI, NewsImageAPI, NewsListAPI
 
 app = Flask(__name__)
 app.config['MONGODB_SETTINGS'] = {
@@ -24,6 +24,8 @@ api.decorators=[cors.crossdomain(origin='*', headers='my-header, accept, content
 
 api.add_resource(NewsAPI, '/news')
 api.add_resource(NewsImageAPI, '/upload_news_image')
+api.add_resource(NewsListAPI, '/news_list')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -81,3 +81,20 @@ class NewsImageAPI(Resource):
 
         return {'url': 'https://s3.amazonaws.com/news-pic/%s' %uploaded_file.filename}
 
+class NewsListAPI(Resource):
+    def get(self):
+        result = []
+        newsList = News.objects()
+        for news in newsList:
+            temp = {}
+            for key in news:
+                if key == 'id':
+                    pass
+                elif key == 'date':
+                    temp[key] = news[key].strftime("%B %d, %Y %I:%M%p")
+                else:
+                    temp[key] = news[key]
+            result.append(temp)
+        return result           
+
+
