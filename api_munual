@@ -8,4 +8,4 @@ Get News List
 curl localhost:5000/news_list/page #
 
 Get News detail
-curl localhost:5000/news -X GET -d "title="
+curl localhost:5000/news -X GET -d "title=xxx"
