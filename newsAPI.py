@@ -34,7 +34,25 @@ class NewsAPI(Resource):
         pass
 
     def get(self):
-        pass
+        args = newsParser.parse_args()
+        title = args['title']
+
+        if title is None:
+            abort(400)
+
+        news = News.objects(title=title).first()
+        if news is None:
+            abort(400)
+
+        result = {}
+        for key in news:
+            if key == 'id':
+                pass
+            elif key == 'date':
+                result[key] = news[key].strftime("%B %d, %Y %I:%M%p")
+            else:
+                result[key] = news[key]
+        return result
 
 
     def put(self):

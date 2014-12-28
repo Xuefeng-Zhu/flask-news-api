@@ -6,3 +6,6 @@ curl --form file=@icon.png --form press=OK localhost:5000/upload_news_image/ -X 
 
 Get News List
 curl localhost:5000/news_list/page #
+
+Get News detail
+curl localhost:5000/news -X GET -d "title="
