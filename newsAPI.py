@@ -46,9 +46,11 @@ class NewsAPI(Resource):
 
         if title is None:
             abort(400)
-
-        news =  News(title=title, abstract=abstract, news_pic=news_pic, content=content)
-        news.save()
+        try:
+            news =  News(title=title, abstract=abstract, news_pic=news_pic, content=content)
+            news.save()
+        except:
+            abort(400)
 
         result = {}
         for key in news:
@@ -84,7 +86,7 @@ class NewsImageAPI(Resource):
 class NewsListAPI(Resource):
     def get(self):
         result = []
-        newsList = News.objects()
+        newsList = News.objects().exclude('content')
         for news in newsList:
             temp = {}
             for key in news:
