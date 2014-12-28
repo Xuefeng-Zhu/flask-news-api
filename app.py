@@ -1,7 +1,7 @@
 from flask import Flask, request, abort
 from flask.ext.restful import Resource, Api
 from flask.ext.restful.utils import cors
-from model.user import db
+from model.news import db
 from model.redis import redis_store
 from newsAPI import NewsAPI, NewsImageAPI, NewsListAPI
 
