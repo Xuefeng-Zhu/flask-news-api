@@ -1,11 +1,10 @@
-from flask import request, abort
+from flask import request, abort, json
 from flask.ext.restful import Resource, reqparse
 from model.redis import redis_store
 from model.news import News
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
 import boto
-
 
 SECRET_KEY = 'flask is cool'
 
@@ -27,7 +26,7 @@ newsParser = reqparse.RequestParser()
 newsParser.add_argument('title', type=str)
 newsParser.add_argument('abstract', type=str)
 newsParser.add_argument('news_pic', type=str)
-newsParser.add_argument('content')
+newsParser.add_argument('content', type=list)
 
 class NewsAPI(Resource):
     def options(self):
@@ -50,6 +49,8 @@ class NewsAPI(Resource):
                 pass
             elif key == 'date':
                 result[key] = news[key].strftime("%B %d, %Y %I:%M%p")
+            elif key == 'content':
+                result[key] = json.loads(news[key])
             else:
                 result[key] = news[key]
         return result
@@ -64,8 +65,9 @@ class NewsAPI(Resource):
 
         if title is None:
             abort(400)
+
         try:
-            news =  News(title=title, abstract=abstract, news_pic=news_pic, content=content)
+            news = News(title=title, abstract=abstract, news_pic=news_pic, content=json.dumps(content))
             news.save()
         except:
             abort(400)
