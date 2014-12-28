@@ -5,4 +5,4 @@ Upload News Image
 curl --form file=@icon.png --form press=OK localhost:5000/upload_news_image/ -X POST
 
 Get News List
-curl localhost:5000/news_list
+curl localhost:5000/news_list/page #

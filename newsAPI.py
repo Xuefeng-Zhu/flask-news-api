@@ -84,9 +84,9 @@ class NewsImageAPI(Resource):
         return {'url': 'https://s3.amazonaws.com/news-pic/%s' %uploaded_file.filename}
 
 class NewsListAPI(Resource):
-    def get(self):
+    def get(self, page):
         result = []
-        newsList = News.objects().exclude('content').order_by('-date')
+        newsList = News.objects().exclude('content').order_by('-date')[10*page : 10*(page+1)]
         for news in newsList:
             temp = {}
             for key in news:

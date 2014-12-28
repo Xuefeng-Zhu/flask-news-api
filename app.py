@@ -24,7 +24,7 @@ api.decorators=[cors.crossdomain(origin='*', headers='my-header, accept, content
 
 api.add_resource(NewsAPI, '/news')
 api.add_resource(NewsImageAPI, '/upload_news_image')
-api.add_resource(NewsListAPI, '/news_list')
+api.add_resource(NewsListAPI, '/news_list/<int:page>')
 
 
 if __name__ == '__main__':
