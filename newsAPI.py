@@ -86,7 +86,7 @@ class NewsImageAPI(Resource):
 class NewsListAPI(Resource):
     def get(self):
         result = []
-        newsList = News.objects().exclude('content')
+        newsList = News.objects().exclude('content').order_by('-date')
         for news in newsList:
             temp = {}
             for key in news:
