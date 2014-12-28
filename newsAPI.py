@@ -26,7 +26,7 @@ newsParser = reqparse.RequestParser()
 newsParser.add_argument('title', type=str)
 newsParser.add_argument('abstract', type=str)
 newsParser.add_argument('news_pic', type=str)
-newsParser.add_argument('content', type=list)
+# newsParser.add_argument('content', type=list)
 
 class NewsAPI(Resource):
     def options(self):
@@ -61,7 +61,9 @@ class NewsAPI(Resource):
         title = args['title']
         abstract = args['abstract']
         news_pic = args['news_pic']
-        content = args['content']
+        # content = args['content']
+        content = request.json['content']
+        print content
 
         if title is None:
             abort(400)
