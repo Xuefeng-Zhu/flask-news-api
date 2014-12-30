@@ -26,7 +26,7 @@ newsParser = reqparse.RequestParser()
 newsParser.add_argument('title', type=str)
 newsParser.add_argument('abstract', type=str)
 newsParser.add_argument('news_pic', type=str)
-# newsParser.add_argument('content', type=list)
+newsParser.add_argument('content', type=str)
 
 class NewsAPI(Resource):
     def options(self):
@@ -49,8 +49,6 @@ class NewsAPI(Resource):
                 pass
             elif key == 'date':
                 result[key] = news[key].strftime("%B %d, %Y %I:%M%p")
-            elif key == 'content':
-                result[key] = json.loads(news[key])
             else:
                 result[key] = news[key]
         return result
@@ -61,15 +59,14 @@ class NewsAPI(Resource):
         title = args['title']
         abstract = args['abstract']
         news_pic = args['news_pic']
-        # content = args['content']
-        content = request.json['content']
+        content = args['content']
         print content
 
         if title is None:
             abort(400)
 
         try:
-            news = News(title=title, abstract=abstract, news_pic=news_pic, content=json.dumps(content))
+            news = News(title=title, abstract=abstract, news_pic=news_pic, content=content)
             news.save()
         except:
             abort(400)
