@@ -112,12 +112,13 @@ class NewsListAPI(Resource):
         for news in newsList:
             temp = {}
             for key in news:
-                if key == 'id':
+                if key == 'id' and key == 'content':
                     pass
                 elif key == 'date':
                     temp[key] = news[key].strftime("%B %d, %Y %I:%M%p")
                 else:
                     temp[key] = news[key]
+            temp['news_url'] = "http://xuefeng-zhu.github.io/news-client/user/#/view/%s" %news['title']
             result.append(temp)
         return result           
 
