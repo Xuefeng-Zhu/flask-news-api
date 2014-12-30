@@ -26,7 +26,8 @@ newsParser = reqparse.RequestParser()
 newsParser.add_argument('title', type=str)
 newsParser.add_argument('abstract', type=str)
 newsParser.add_argument('news_pic', type=str)
-newsParser.add_argument('content', type=str)
+newsParser.add_argument('content')
+newsParser.add_argument('tags', type=list)
 
 class NewsAPI(Resource):
     def options(self):
@@ -60,16 +61,16 @@ class NewsAPI(Resource):
         abstract = args['abstract']
         news_pic = args['news_pic']
         content = args['content']
-        print content
+        tags = args['tags']
 
         if title is None:
             abort(400)
 
-        try:
-            news = News(title=title, abstract=abstract, news_pic=news_pic, content=content)
-            news.save()
-        except:
-            abort(400)
+        # try:
+        news = News(title=title, abstract=abstract, news_pic=news_pic, content=content, tags=tags)
+        news.save()
+        # except:
+            # abort(400)
 
         result = {}
         for key in news:
@@ -113,6 +114,8 @@ class NewsListAPI(Resource):
                     pass
                 elif key == 'date':
                     temp[key] = news[key].strftime("%B %d, %Y %I:%M%p")
+                elif news[key] == None:
+                    temp[key] = ''
                 else:
                     temp[key] = news[key]
             temp['news_url'] = "http://xuefeng-zhu.github.io/news-client/user/#/view/%s" %news['title']
