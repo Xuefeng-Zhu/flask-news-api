@@ -112,7 +112,7 @@ class NewsListAPI(Resource):
         for news in newsList:
             temp = {}
             for key in news:
-                if key == 'id' and key == 'content':
+                if key == 'id' or key == 'content':
                     pass
                 elif key == 'date':
                     temp[key] = news[key].strftime("%B %d, %Y %I:%M%p")
