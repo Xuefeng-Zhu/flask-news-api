@@ -4,8 +4,8 @@ from datetime import datetime
 db = MongoEngine()
 
 class Comment(db.EmbeddedDocument):
-	username = db.StringField()
-	content = db.StringField()
+	username = db.StringField(required=True)
+	content = db.StringField(required=True)
 	date = db.DateTimeField(default=datetime.now)
 
 class News(db.Document):

@@ -4,6 +4,8 @@ from flask.ext.restful.utils import cors
 from model.news import db
 from model.redis import redis_store
 from newsAPI import NewsAPI, NewsImageAPI, NewsListAPI
+from commentAPI import CommentAPI
+
 
 app = Flask(__name__)
 app.config['MONGODB_SETTINGS'] = {
@@ -26,6 +28,7 @@ api.add_resource(NewsAPI, '/news')
 api.add_resource(NewsImageAPI, '/upload_news_image')
 api.add_resource(NewsListAPI, '/news_list/<string:tags>/<int:page>')
 
+api.add_resource(CommentAPI, '/comment')
 
 if __name__ == '__main__':
     app.run(debug=True)

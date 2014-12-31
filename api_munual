@@ -9,3 +9,6 @@ curl localhost:5000/news_list/tagA+tagB/page #
 
 Get News detail
 curl localhost:5000/news -X GET -d "title=xxx"
+
+Put Comment:
+curl localhost:5000/comment -X PUT -d "token=xx" -d "username=test-user" -d "content=bla bla bla"
