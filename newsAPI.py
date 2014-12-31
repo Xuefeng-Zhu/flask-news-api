@@ -29,6 +29,18 @@ newsParser.add_argument('news_pic', type=str)
 newsParser.add_argument('content')
 newsParser.add_argument('tags', type=list)
 
+def news_serialize(news):
+    result = {}
+    for key in news:
+        if key == 'id':
+            pass
+        elif key == 'date':
+            result[key] = news[key].strftime("%B %d, %Y %I:%M%p")
+        else:
+            result[key] = news[key]
+    return result    
+
+
 class NewsAPI(Resource):
     def options(self):
         pass
@@ -44,15 +56,8 @@ class NewsAPI(Resource):
         if news is None:
             abort(400)
 
-        result = {}
-        for key in news:
-            if key == 'id':
-                pass
-            elif key == 'date':
-                result[key] = news[key].strftime("%B %d, %Y %I:%M%p")
-            else:
-                result[key] = news[key]
-        return result
+        return news_serialize(news)
+        
 
 
     def put(self):
@@ -66,21 +71,13 @@ class NewsAPI(Resource):
         if title is None:
             abort(400)
 
-        # try:
-        news = News(title=title, abstract=abstract, news_pic=news_pic, content=content, tags=tags)
-        news.save()
-        # except:
-            # abort(400)
+        try:
+            news = News(title=title, abstract=abstract, news_pic=news_pic, content=content, tags=tags)
+            news.save()
+        except:
+            abort(400)
 
-        result = {}
-        for key in news:
-            if key == 'id':
-                pass
-            elif key == 'date':
-                result[key] = news[key].strftime("%B %d, %Y %I:%M%p")
-            else:
-                result[key] = news[key]
-        return result
+        return news_serialize(news)
 
 class NewsImageAPI(Resource):
     def options(self):
@@ -103,29 +100,32 @@ class NewsImageAPI(Resource):
 
         return {'url': 'https://s3.amazonaws.com/news-pic/%s' %uploaded_file.filename}
 
+def news_list_serialize(news_list):
+    result = []
+    for news in news_list:
+        temp = {}
+        for key in news:
+            if key == 'id' or key == 'content':
+                pass
+            elif key == 'date':
+                temp[key] = news[key].strftime("%B %d, %Y %I:%M%p")
+            elif news[key] == None:
+                temp[key] = ''
+            else:
+                temp[key] = news[key]
+        temp['news_url'] = "http://xuefeng-zhu.github.io/news-client/user/#/view/%s" %news['title']
+        result.append(temp)
+    return result
+
+
 class NewsListAPI(Resource):
     def get(self, tags, page):
-
         if tags != 'all':
             tags = tags.split('+')
-            newsList = News.objects(tags__all = tags).exclude('content').order_by('-date')[10*page : 10*(page+1)]
+            news_list = News.objects(tags__all = tags).exclude('content').order_by('-date')[10*page : 10*(page+1)]
         else:
-            newsList = News.objects().exclude('content').order_by('-date')[10*page : 10*(page+1)]
+            news_list = News.objects().exclude('content').order_by('-date')[10*page : 10*(page+1)]
         
-        result = []
-        for news in newsList:
-            temp = {}
-            for key in news:
-                if key == 'id' or key == 'content':
-                    pass
-                elif key == 'date':
-                    temp[key] = news[key].strftime("%B %d, %Y %I:%M%p")
-                elif news[key] == None:
-                    temp[key] = ''
-                else:
-                    temp[key] = news[key]
-            temp['news_url'] = "http://xuefeng-zhu.github.io/news-client/user/#/view/%s" %news['title']
-            result.append(temp)
-        return result           
+        return news_list_serialize(news_list)           
 
 
