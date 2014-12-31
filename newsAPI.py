@@ -29,6 +29,20 @@ newsParser.add_argument('news_pic', type=str)
 newsParser.add_argument('content')
 newsParser.add_argument('tags', type=list)
 
+def comments_serialize(comments):
+    result = []
+    for comment in comments: 
+        temp = {}
+        for key in comment:
+            if key == 'id':
+                pass
+            elif key == 'date':
+                temp[key] = comment[key].strftime("%B %d, %Y %I:%M%p")
+            else:
+                temp[key] = comment[key]
+        result.append(temp)
+    return result
+
 def news_serialize(news):
     result = {}
     for key in news:
@@ -36,6 +50,8 @@ def news_serialize(news):
             pass
         elif key == 'date':
             result[key] = news[key].strftime("%B %d, %Y %I:%M%p")
+        elif key == 'comments':
+            result[key] = comments_serialize(news[key])
         else:
             result[key] = news[key]
     return result    

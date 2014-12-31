@@ -14,26 +14,26 @@ commnetParser.add_argument('content', type=str)
 class CommentAPI(Resource):
 	def put(self):
 		args = commnetParser.parse_args()
-        # token = args['token']
-        title = args['title']
-        username = args['username']
-        content = args['content']
+		# token = args['token']
+		title = args['title']
+		username = args['username']
+		content = args['content']
 
-        if username is None or content is None:
-        	abort(400)
+		if title is None or username is None or content is None:
+			abort(400)
 
-        news = News.objects(title=title).first()
-        if news is None:
-        	abort(400)
+		news = News.objects(title=title).first()
+		if news is None:
+			abort(400)
 
-        comment = Comment(username=username, content=content)
-        if news.comments is None:
-        	news.comments = [comment]
-        else:
-        	news.comments.append(comment)
-        news.save()
-        
-    	return 'success'
+		comment = Comment(username=username, content=content)
+		if news.comments is None:
+			news.comments = [comment]
+		else:
+			news.comments.append(comment)
+		news.save()
+
+		return {'status': 'success'}
 
 
 
