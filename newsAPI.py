@@ -5,6 +5,7 @@ from model.news import News
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
 import boto
+import os
 
 SECRET_KEY = 'flask is cool'
 
@@ -109,7 +110,7 @@ class NewsImageAPI(Resource):
 
         uploaded_file = request.files['file']
 
-        conn = boto.connect_s3('AKIAI6Y5TYNOTCIHK63Q', 'mmIpQx6mX/oFjZC6snQ7anO0yTOhEbpqPf2pcr0E')
+        conn = boto.connect_s3(os.environ['S3_KEY'], os.environ['S3_SECRET'])
         bucket = conn.get_bucket('news-pic')
         key = bucket.new_key(uploaded_file.filename)
         key.set_contents_from_file(uploaded_file)
