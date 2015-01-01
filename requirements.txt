@@ -5,3 +5,4 @@ flask-redis==0.0.6
 itsdangerous==0.24 
 gunicorn
 boto
+newspaper
