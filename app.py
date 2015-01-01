@@ -5,6 +5,7 @@ from model.news import db
 from model.redis import redis_store
 from newsAPI import NewsAPI, NewsImageAPI, NewsListAPI
 from commentAPI import CommentAPI
+from feedAPI import ArticleAPI
 
 
 app = Flask(__name__)
@@ -29,6 +30,8 @@ api.add_resource(NewsImageAPI, '/upload_news_image')
 api.add_resource(NewsListAPI, '/news_list/<string:tags>/<int:page>')
 
 api.add_resource(CommentAPI, '/comment')
+
+api.add_resource(ArticleAPI, '/load_article/<path:link>')
 
 if __name__ == '__main__':
     app.run(debug=True)

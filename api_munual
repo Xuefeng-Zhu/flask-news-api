@@ -13,5 +13,7 @@ curl localhost:5000/news -X GET -d "title=xxx"
 Put Comment:
 curl localhost:5000/comment -X PUT -d "token=xx" -d "title=test" -d "username=test-user" -d "content=bla bla bla"
 
+Load Article:
+curl localhost:5000/load_article/http://www.engadget.com/2015/01/01/us-supreme-court-moving-to-digital-filing-system-in-2016/ -X GET
 
 S3_KEY=mykey S3_SECRET=mysecret application
