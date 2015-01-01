@@ -122,7 +122,7 @@ def news_list_serialize(news_list):
     for news in news_list:
         temp = {}
         for key in news:
-            if key == 'id' or key == 'content' or key == 'comment':
+            if key == 'id' or key == 'content' or key == 'comments':
                 pass
             elif key == 'date':
                 temp[key] = news[key].strftime("%B %d, %Y %I:%M%p")
@@ -141,7 +141,7 @@ class NewsListAPI(Resource):
             tags = tags.split('+')
             news_list = News.objects(tags__all = tags).exclude('content', 'comments').order_by('-date')[10*page : 10*(page+1)]
         else:
-            news_list = News.objects().exclude('content').order_by('-date')[10*page : 10*(page+1)]
+            news_list = News.objects().exclude('content', 'comments').order_by('-date')[10*page : 10*(page+1)]
         
         return news_list_serialize(news_list)           
 
