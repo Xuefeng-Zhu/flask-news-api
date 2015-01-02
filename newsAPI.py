@@ -95,6 +95,9 @@ class NewsAPI(Resource):
             abort(400)
 
         news = News.objects(id=id).first()
+        if news is None:
+            abort(400)
+
         news.title = title
         news.abstract = abstract
         news.news_pic = news_pic
@@ -103,6 +106,20 @@ class NewsAPI(Resource):
         news.save()
 
         return news_serialize(news)
+
+    def delete(self):
+        args = newsParser.parse_args()
+        id = args['id']
+
+        if id is None:
+            abort(400)
+
+        news = News.objects(id=id).first()
+        if news is None:
+            abort(400)
+
+        news.delete()
+        return {'status': 'success'}
 
 class NewsImageAPI(Resource):
     def options(self):
