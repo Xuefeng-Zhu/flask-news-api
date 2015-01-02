@@ -29,7 +29,6 @@ newsParser.add_argument('title', type=str)
 newsParser.add_argument('abstract', type=str)
 newsParser.add_argument('news_pic', type=str)
 newsParser.add_argument('content')
-newsParser.add_argument('tags', type=list)
 
 def news_serialize(news):
     result = {}
@@ -57,6 +56,7 @@ class NewsAPI(Resource):
         news = News.objects(title=title).exclude('comments').first()
         if news is None:
             abort(400)
+        news.update_one(inc__news_views=1)
 
         return news_serialize(news)
         
@@ -67,11 +67,11 @@ class NewsAPI(Resource):
         abstract = args['abstract']
         news_pic = args['news_pic']
         content = args['content']
-        tags = request.form['tags']
+        tags = request.json['tags']
 
         if title is None:
             abort(400)
-
+        print title
         try:
             news = News(title=title, abstract=abstract, news_pic=news_pic, content=content, tags=tags)
             news.save()
@@ -131,13 +131,12 @@ class NewsListAPI(Resource):
 
 searchParser = reqparse.RequestParser()
 searchParser.add_argument('search', type=str)
-searchParser.add_argument('tags', type=list)
 
 class SearchNewsAPI(Resource):
     def get(self):
         args = searchParser.parse_args()
         search = args['search']
-        tags = args['tags']
+        tags = request.json['tags']
 
         if tags != 'all':
             tags = tags.split('+')
