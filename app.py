@@ -8,7 +8,7 @@ from commentAPI import CommentAPI
 from feedAPI import ArticleAPI
 
 
-app = Flask(__name__, static_url_path='static')
+app = Flask(__name__, static_url_path='')
 app.config['MONGODB_SETTINGS'] = {
     'db': 'flask-test',
     'host': 'ds027741.mongolab.com',
