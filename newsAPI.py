@@ -135,20 +135,22 @@ searchParser.add_argument('search', type=str)
 searchParser.add_argument('page', type=int)
 
 class SearchNewsAPI(Resource):
-    def get(self):
+    def options(self):
+        pass
+
+    def post(self):
         args = searchParser.parse_args()
         search = args['search']
         tags = request.json['tags']
         page = args['page']
 
-        if tags is None or tags is []:
+        if tags is None or len(tags) == 0:
             news_list = News.objects().exclude('content', 'comments').order_by('-date')
         else:
             news_list = News.objects(tags__all = tags).exclude('content', 'comments').order_by('-date')
 
         if search is not None and search is not '':
-            news_list = news_list.filter(title__contains =search)
+            news_list = news_list.filter(title__icontains =search)
 
-        
         return news_list_serialize(news_list[10*page : 10*(page+1)])  
 

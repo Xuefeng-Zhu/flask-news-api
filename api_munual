@@ -8,7 +8,7 @@ Get News List
 curl localhost:5000/news_list/tagA+tagB/page #
 
 Search News List
-curl localhost:5000/search_news -X GET -d "search=test" -d "tags=[]" -d "page=0"
+curl localhost:5000/search_news -X POST -d "search=test" -d "tags=[]" -d "page=0"
 
 Get News detail
 curl localhost:5000/news -X GET -d "title=xxx"
