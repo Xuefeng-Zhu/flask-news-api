@@ -25,6 +25,7 @@ def verify_auth_token(token):
 
 
 newsParser = reqparse.RequestParser()
+newsParser.add_argument('id', type=str)
 newsParser.add_argument('title', type=str)
 newsParser.add_argument('abstract', type=str)
 newsParser.add_argument('news_pic', type=str)
@@ -33,8 +34,8 @@ newsParser.add_argument('content')
 def news_serialize(news):
     result = {}
     for key in news:
-        if key == 'id' or key == 'comments':
-            pass
+        if key == 'id':
+            result[key] = str(news[key])
         elif key == 'date':
             result[key] = news[key].strftime("%B %d, %Y %I:%M%p")
         else:
@@ -78,6 +79,28 @@ class NewsAPI(Resource):
         except:
             print title
             abort(400)
+
+        return news_serialize(news)
+
+    def post(self):
+        args = newsParser.parse_args()
+        id = args['id']
+        title = args['title']
+        abstract = args['abstract']
+        news_pic = args['news_pic']
+        content = args['content']
+        tags = request.json['tags']
+
+        if id is None or title is None:
+            abort(400)
+
+        news = News.objects(id=id).first()
+        news.title = title
+        news.abstract = abstract
+        news.news_pic = news_pic
+        news.content = content
+        news.tags = tags
+        news.save()
 
         return news_serialize(news)
 

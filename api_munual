@@ -1,6 +1,9 @@
 Create News 
 curl localhost:5000/news -X PUT -d "title=new1" -d "abstract=bla bla bla" -d "news_pic=http://www.cnbeta.com" -d "content=bla bla bla"
 
+Edit News 
+curl localhost:5000/news -X POST -d "id=54a62c56077d3500077f23c7" -d "title=new1" -d "abstract=bla bla bla" -d "news_pic=http://www.cnbeta.com" -d "content=bla bla bla"
+
 Upload News Image 
 curl --form file=@icon.png --form press=OK localhost:5000/upload_news_image/ -X POST
 
