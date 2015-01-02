@@ -26,6 +26,15 @@ def comments_serialize(comments):
     return result
 
 class CommentAPI(Resource):
+	def get(self):
+		args = commnetParser.parse_args()
+		# token = args['token']
+		title = args['title']
+		news = News.objects(title=title).only('comments').first()
+		if news is None:
+			abort(400)
+		return comments_serialize(news.comments)
+
 	def put(self):
 		args = commnetParser.parse_args()
 		# token = args['token']
@@ -36,7 +45,7 @@ class CommentAPI(Resource):
 		if title is None or username is None or content is None:
 			abort(400)
 
-		news = News.objects(title=title).first()
+		news = News.objects(title=title).only('comments').first()
 		if news is None:
 			abort(400)
 

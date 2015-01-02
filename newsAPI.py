@@ -71,11 +71,12 @@ class NewsAPI(Resource):
 
         if title is None:
             abort(400)
-        print title
+
         try:
             news = News(title=title, abstract=abstract, news_pic=news_pic, content=content, tags=tags)
             news.save()
         except:
+            print title
             abort(400)
 
         return news_serialize(news)
@@ -131,18 +132,23 @@ class NewsListAPI(Resource):
 
 searchParser = reqparse.RequestParser()
 searchParser.add_argument('search', type=str)
+searchParser.add_argument('page', type=int)
 
 class SearchNewsAPI(Resource):
     def get(self):
         args = searchParser.parse_args()
         search = args['search']
         tags = request.json['tags']
+        page = args['page']
 
-        if tags != 'all':
-            tags = tags.split('+')
-            news_list = News.objects(tags__all = tags).exclude('content', 'comments').order_by('-date')[10*page : 10*(page+1)]
+        if tags is None or tags is []:
+            news_list = News.objects().exclude('content', 'comments').order_by('-date')
         else:
-            news_list = News.objects().exclude('content', 'comments').order_by('-date')[10*page : 10*(page+1)]
+            news_list = News.objects(tags__all = tags).exclude('content', 'comments').order_by('-date')
+
+        if search is not None and search is not '':
+            news_list = news_list.filter(title__contains =search)
+
         
-        return news_list_serialize(news_list)  
+        return news_list_serialize(news_list[10*page : 10*(page+1)])  
 

@@ -20,4 +20,3 @@ class News(db.Document):
 
 
 
-
