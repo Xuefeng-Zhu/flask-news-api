@@ -56,7 +56,7 @@ class NewsAPI(Resource):
         news = News.objects(title=title).exclude('comments').first()
         if news is None:
             abort(400)
-        news.update_one(inc__news_views=1)
+        news.update(inc__news_views=1)
 
         return news_serialize(news)
         
