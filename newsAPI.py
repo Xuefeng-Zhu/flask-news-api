@@ -6,7 +6,7 @@ from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
 import boto
 import os
- 
+
 
 SECRET_KEY = 'flask is cool'
 
@@ -31,29 +31,13 @@ newsParser.add_argument('news_pic', type=str)
 newsParser.add_argument('content')
 newsParser.add_argument('tags', type=list)
 
-def comments_serialize(comments):
-    result = []
-    for comment in comments: 
-        temp = {}
-        for key in comment:
-            if key == 'id':
-                pass
-            elif key == 'date':
-                temp[key] = comment[key].strftime("%B %d, %Y %I:%M%p")
-            else:
-                temp[key] = comment[key]
-        result.append(temp)
-    return result
-
 def news_serialize(news):
     result = {}
     for key in news:
-        if key == 'id':
+        if key == 'id' or key == 'comments':
             pass
         elif key == 'date':
             result[key] = news[key].strftime("%B %d, %Y %I:%M%p")
-        elif key == 'comments':
-            result[key] = comments_serialize(news[key])
         else:
             result[key] = news[key]
     return result    
@@ -70,13 +54,12 @@ class NewsAPI(Resource):
         if title is None:
             abort(400)
 
-        news = News.objects(title=title).first()
+        news = News.objects(title=title).exclude('comments').first()
         if news is None:
             abort(400)
 
         return news_serialize(news)
         
-
 
     def put(self):
         args = newsParser.parse_args()
@@ -84,7 +67,7 @@ class NewsAPI(Resource):
         abstract = args['abstract']
         news_pic = args['news_pic']
         content = args['content']
-        tags = args['tags']
+        tags = request.form['tags']
 
         if title is None:
             abort(400)
@@ -146,4 +129,21 @@ class NewsListAPI(Resource):
         
         return news_list_serialize(news_list)           
 
+searchParser = reqparse.RequestParser()
+searchParser.add_argument('search', type=str)
+searchParser.add_argument('tags', type=list)
+
+class SearchNewsAPI(Resource):
+    def get(self):
+        args = searchParser.parse_args()
+        search = args['search']
+        tags = args['tags']
+
+        if tags != 'all':
+            tags = tags.split('+')
+            news_list = News.objects(tags__all = tags).exclude('content', 'comments').order_by('-date')[10*page : 10*(page+1)]
+        else:
+            news_list = News.objects().exclude('content', 'comments').order_by('-date')[10*page : 10*(page+1)]
+        
+        return news_list_serialize(news_list)  
 

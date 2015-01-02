@@ -11,6 +11,20 @@ commnetParser.add_argument('title', type=str)
 commnetParser.add_argument('username', type=str)
 commnetParser.add_argument('content', type=str)
 
+def comments_serialize(comments):
+    result = []
+    for comment in comments: 
+        temp = {}
+        for key in comment:
+            if key == 'id':
+                pass
+            elif key == 'date':
+                temp[key] = comment[key].strftime("%B %d, %Y %I:%M%p")
+            else:
+                temp[key] = comment[key]
+        result.append(temp)
+    return result
+
 class CommentAPI(Resource):
 	def put(self):
 		args = commnetParser.parse_args()
