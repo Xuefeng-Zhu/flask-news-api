@@ -16,7 +16,8 @@ app.config['MONGODB_SETTINGS'] = {
     'password': '123123'
 }
 
-app.config['REDIS_URL'] = "redis://:123123@pub-redis-17784.us-east-1-2.1.ec2.garantiadata.com:17784/0"
+app.config['REDIS_URL'] = 'redis://:123123@pub-redis-17784.us-east-1-2.1.ec2.garantiadata.com:17784/0'
+app.config['SECRET_KEY'] = 'flask is cool' 
 
 db.init_app(app)
 redis_store.init_app(app)

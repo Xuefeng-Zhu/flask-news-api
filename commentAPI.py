@@ -1,23 +1,22 @@
 from flask import request, abort
 from flask.ext.restful import Resource, reqparse
-from model import redis_store
 from model.news import News
 from model.comment import Comment
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
 from serialize import comments_serialize
+from userAuth import auth_required
 
 commnetParser = reqparse.RequestParser()
-commnetParser.add_argument('token', type=str)
 commnetParser.add_argument('title', type=str)
 commnetParser.add_argument('username', type=str)
 commnetParser.add_argument('content', type=str)
 
 
 class CommentAPI(Resource):
-	def get(self):
+	@auth_required
+	def get(self, email):
 		args = commnetParser.parse_args()
-		# token = args['token']
 		title = args['title']
 		news = News.objects(title=title).only('comments').first()
 		if news is None:
