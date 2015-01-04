@@ -12,10 +12,9 @@ commnetParser.add_argument('title', type=str)
 commnetParser.add_argument('username', type=str)
 commnetParser.add_argument('content', type=str)
 
-
 class CommentAPI(Resource):
 	@auth_required
-	def get(self, email):
+	def get(self):
 		args = commnetParser.parse_args()
 		title = args['title']
 		news = News.objects(title=title).only('comments').first()
@@ -23,6 +22,7 @@ class CommentAPI(Resource):
 			abort(400)
 		return comments_serialize(news.comments)
 
+	@auth_required
 	def put(self):
 		args = commnetParser.parse_args()
 		# token = args['token']

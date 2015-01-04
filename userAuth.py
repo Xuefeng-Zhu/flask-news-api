@@ -26,7 +26,7 @@ def auth_required(f):
             abort(401)    # invalid token
 
         if redis_store.get(email) == token:
-            kwargs['email'] = email
+            # kwargs['email'] = email
             return f(*args, **kwargs)
         else:
             abort(401) 
