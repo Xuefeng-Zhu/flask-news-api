@@ -4,6 +4,7 @@ from model.redis import redis_store
 from model.news import News
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
+from serialize import news_serialize, news_list_serialize
 import boto
 import os
 
@@ -30,18 +31,7 @@ newsParser.add_argument('title', type=str)
 newsParser.add_argument('abstract', type=str)
 newsParser.add_argument('news_pic', type=str)
 newsParser.add_argument('content')
-
-def news_serialize(news):
-    result = {}
-    for key in news:
-        if key == 'id':
-            result[key] = str(news[key])
-        elif key == 'date':
-            result[key] = news[key].strftime("%B %d, %Y %I:%M%p")
-        else:
-            result[key] = news[key]
-    return result    
-
+  
 
 class NewsAPI(Resource):
     def options(self):
@@ -143,23 +133,6 @@ class NewsImageAPI(Resource):
 
         return {'url': 'https://s3.amazonaws.com/news-pic/%s' %uploaded_file.filename}
 
-def news_list_serialize(news_list):
-    result = []
-    for news in news_list:
-        temp = {}
-        for key in news:
-            if key == 'id' or key == 'content' or key == 'comments':
-                pass
-            elif key == 'date':
-                temp[key] = news[key].strftime("%B %d, %Y %I:%M%p")
-            elif news[key] == None:
-                temp[key] = ''
-            else:
-                temp[key] = news[key]
-        temp['news_url'] = "http://xuefeng-zhu.github.io/news-client/user/#/view/%s" %news['title']
-        result.append(temp)
-    return result
-
 
 class NewsListAPI(Resource):
     def get(self, tags, page):
@@ -168,7 +141,6 @@ class NewsListAPI(Resource):
             news_list = News.objects(tags__all = tags).exclude('content', 'comments').order_by('-date')[10*page : 10*(page+1)]
         else:
             news_list = News.objects().exclude('content', 'comments').order_by('-date')[10*page : 10*(page+1)]
-        print app.config['MONGODB_SETTINGS']
         return news_list_serialize(news_list)           
 
 searchParser = reqparse.RequestParser()
