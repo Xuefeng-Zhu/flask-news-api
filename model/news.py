@@ -1,12 +1,7 @@
-from flask.ext.mongoengine import MongoEngine
+from model import db
+from model.comment import Comment
 from datetime import datetime
 
-db = MongoEngine()
-
-class Comment(db.EmbeddedDocument):
-	username = db.StringField(required=True)
-	content = db.StringField(required=True)
-	date = db.DateTimeField(default=datetime.now)
 
 class News(db.Document):
     title = db.StringField(max_length=120, unique=True)

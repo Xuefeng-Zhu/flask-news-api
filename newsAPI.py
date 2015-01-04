@@ -68,6 +68,7 @@ class NewsAPI(Resource):
         abstract = args['abstract']
         news_pic = args['news_pic']
         content = args['content']
+
         tags = request.json['tags']
 
         if title is None:
@@ -167,7 +168,7 @@ class NewsListAPI(Resource):
             news_list = News.objects(tags__all = tags).exclude('content', 'comments').order_by('-date')[10*page : 10*(page+1)]
         else:
             news_list = News.objects().exclude('content', 'comments').order_by('-date')[10*page : 10*(page+1)]
-        
+        print app.config['MONGODB_SETTINGS']
         return news_list_serialize(news_list)           
 
 searchParser = reqparse.RequestParser()
