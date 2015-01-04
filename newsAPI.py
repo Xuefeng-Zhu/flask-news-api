@@ -1,6 +1,6 @@
 from flask import request, abort, json
 from flask.ext.restful import Resource, reqparse
-from model.redis import redis_store
+from model import redis_store
 from model.news import News
 from itsdangerous import (TimedJSONWebSignatureSerializer
                           as Serializer, BadSignature, SignatureExpired)
