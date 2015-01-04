@@ -9,7 +9,6 @@ def news_serialize(news):
             result[key] = news[key]
     return result  
 
-
 def news_list_serialize(news_list):
     result = []
     for news in news_list:
@@ -27,7 +26,6 @@ def news_list_serialize(news_list):
         result.append(temp)
     return result
 
-
 def comments_serialize(comments):
     result = []
     for comment in comments: 
@@ -40,4 +38,12 @@ def comments_serialize(comments):
             else:
                 temp[key] = comment[key]
         result.append(temp)
+    return result
+
+def article_serialize(article):
+    result = {
+        'title': article.title,
+        'news_pic': article.top_image,
+        'content': article.article_html
+    }
     return result

@@ -2,15 +2,7 @@ from flask import request, abort, json
 from flask.ext.restful import Resource, reqparse
 from newspaper import Article
 import urlparse
-
-
-def article_serialize(article):
-	result = {
-		'title': article.title,
-		'news_pic': article.top_image,
-		'content': article.article_html
-	}
-	return result
+from serialize import article_serialize
 
 
 class ArticleAPI(Resource):

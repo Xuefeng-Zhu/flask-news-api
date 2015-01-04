@@ -21,7 +21,6 @@ app.config['SECRET_KEY'] = 'flask is cool'
 
 db.init_app(app)
 redis_store.init_app(app)
-
 api = Api(app)
 api.decorators=[cors.crossdomain(origin='*', headers='my-header, accept, content-type')]
 
