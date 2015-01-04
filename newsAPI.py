@@ -32,7 +32,6 @@ newsParser.add_argument('abstract', type=str)
 newsParser.add_argument('news_pic', type=str)
 newsParser.add_argument('content')
   
-
 class NewsAPI(Resource):
     def options(self):
         pass
@@ -50,7 +49,6 @@ class NewsAPI(Resource):
         news.update(inc__news_views=1)
 
         return news_serialize(news)
-        
 
     def put(self):
         args = newsParser.parse_args()
@@ -112,6 +110,7 @@ class NewsAPI(Resource):
         news.delete()
         return {'status': 'success'}
 
+
 class NewsImageAPI(Resource):
     def options(self):
         pass
@@ -141,7 +140,8 @@ class NewsListAPI(Resource):
             news_list = News.objects(tags__all = tags).exclude('content', 'comments').order_by('-date')[10*page : 10*(page+1)]
         else:
             news_list = News.objects().exclude('content', 'comments').order_by('-date')[10*page : 10*(page+1)]
-        return news_list_serialize(news_list)           
+        return news_list_serialize(news_list)  
+
 
 searchParser = reqparse.RequestParser()
 searchParser.add_argument('search', type=str)
