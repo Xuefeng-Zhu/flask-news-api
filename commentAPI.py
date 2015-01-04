@@ -25,7 +25,6 @@ class CommentAPI(Resource):
 	@auth_required
 	def put(self):
 		args = commnetParser.parse_args()
-		# token = args['token']
 		title = args['title']
 		username = args['username']
 		content = args['content']
@@ -34,10 +33,8 @@ class CommentAPI(Resource):
 			abort(400)
 
 		comment = Comment(username=username, content=content)
-		news = News.objects(title=title).only('comments').update_one(push__comments=comment)
-		try:
-			pass
-		except:
+		success = News.objects(title=title).only('comments').update_one(push__comments=comment)
+		if success is 0:
 			abort(400)
 
 		return {'status': 'success'}

@@ -9,22 +9,6 @@ import boto
 import os
 
 
-SECRET_KEY = 'flask is cool'
-
-def verify_auth_token(token):
-    s = Serializer(SECRET_KEY)
-    try:
-        username = s.loads(token)
-    except SignatureExpired:
-        return False    # valid token, but expired
-    except BadSignature:
-        return False    # invalid token
-    if redis_store.get(username) == token:
-        return True
-    else:
-        return False
-
-
 newsParser = reqparse.RequestParser()
 newsParser.add_argument('id', type=str)
 newsParser.add_argument('title', type=str)
@@ -56,7 +40,6 @@ class NewsAPI(Resource):
         abstract = args['abstract']
         news_pic = args['news_pic']
         content = args['content']
-
         tags = request.json['tags']
 
         if title is None:
@@ -116,13 +99,6 @@ class NewsImageAPI(Resource):
         pass
 
     def post(self):
-        # verify token 
-        # if token is None:
-        #     abort(400)
-        # email = verify_auth_token(token) 
-        # if email is None:
-        #     abort(400)
-
         uploaded_file = request.files['file']
 
         conn = boto.connect_s3(os.environ['S3_KEY'], os.environ['S3_SECRET'])
