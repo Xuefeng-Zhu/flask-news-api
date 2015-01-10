@@ -21,13 +21,12 @@ class NewsAPI(Resource):
     def get(self):
         args = newsParser.parse_args()
         title = args['title']
-
+        
         if title is None:
             abort(400)
 
         news = cache.get(title)
         if news is not None:
-            News.objects(title=title).update(inc__news_views=1)
             return news_serialize(news)
 
         print "test"

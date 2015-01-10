@@ -20,10 +20,10 @@ Get News detail
 curl localhost:5000/news -X GET -d "title=xxx"
 
 Put Comment:
-curl localhost:5000/comment -X PUT -d "token=xx" -d "title=test" -d "username=test-user" -d "content=bla bla bla"
+curl localhost:5000/comment -X PUT --header "token: from login api" -d "title=test" -d "username=test-user" -d "content=bla bla bla"
 
 Get Comment:
-curl localhost:5000/comment -X GET -d "token=xx" -d "title=test" 
+curl localhost:5000/comment -X GET --header "token: from login api" -d "title=test" 
 
 Load Article:
 curl localhost:5000/load_article/http://www.engadget.com/2015/01/01/us-supreme-court-moving-to-digital-filing-system-in-2016/ -X GET
