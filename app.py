@@ -8,19 +8,11 @@ from feedAPI import ArticleAPI
 
 
 app = Flask(__name__, static_url_path='')
-app.config['MONGODB_SETTINGS'] = {
-    'db': 'flask-test',
-    'host': 'ds027741.mongolab.com',
-    'port': 27741,
-    'username': 'flask-admin',
-    'password': '123123'
-}
-
-app.config['REDIS_URL'] = 'redis://:123123@pub-redis-17784.us-east-1-2.1.ec2.garantiadata.com:17784/0'
-app.config['SECRET_KEY'] = 'flask is cool' 
+app.config.from_object('config')
 
 db.init_app(app)
 redis_store.init_app(app)
+
 api = Api(app)
 api.decorators=[cors.crossdomain(origin='*', headers='my-header, accept, content-type')]
 
