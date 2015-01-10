@@ -137,13 +137,17 @@ class SearchNewsAPI(Resource):
         tags = request.json['tags']
         page = args['page']
 
+        news_list = cache.get((search, tags, page))
+        if news_list is not None:
+            return news_list_serialize(news_list)
+
         if tags is None or len(tags) == 0:
             news_list = News.objects().exclude('content', 'comments').order_by('-date')
         else:
             news_list = News.objects(tags__all = tags).exclude('content', 'comments').order_by('-date')
-
         if search is not None and search is not '':
             news_list = news_list.filter(title__icontains =search)
+        cache.set((search, tags, page), news_list, timeout=600)
 
         return news_list_serialize(news_list[10*page : 10*(page+1)])  
 
