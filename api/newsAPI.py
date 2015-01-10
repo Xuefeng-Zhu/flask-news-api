@@ -27,7 +27,7 @@ class NewsAPI(Resource):
 
         news = cache.get(title)
         if news is not None:
-            news = News.objects(title=title).update(inc__news_views=1)
+            News.objects(title=title).update(inc__news_views=1)
             return news_serialize(news)
 
         print "test"
