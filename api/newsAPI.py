@@ -25,10 +25,16 @@ class NewsAPI(Resource):
         if title is None:
             abort(400)
 
+        news = cache.get(title)
+        if news is not None:
+            return news_serialize(news)
+
+        print "test"
         news = News.objects(title=title).exclude('comments').first()
         if news is None:
             abort(400)
         news.update(inc__news_views=1)
+        cache.set(title, news, timeout=600)
 
         return news_serialize(news)
 
