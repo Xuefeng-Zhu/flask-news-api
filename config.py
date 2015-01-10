@@ -7,7 +7,5 @@ MONGODB_SETTINGS = {
     'password': '123123'
 }
 SECRET_KEY = 'flask is cool'
-CACHE_TYPE = 'gaememcached'
-# CACHE_MEMCACHED_SERVERS = 'mc5.dev.ec2.memcachier.com:11211'
-# CACHE_MEMCACHED_USERNAME = '17708b'
-# CACHE_MEMCACHED_PASSWORD = '666b86f092'
+CACHE_TYPE = 'redis'
+CACHE_REDIS_URL = 'redis://:123123@pub-redis-17784.us-east-1-2.1.ec2.garantiadata.com:17784/0'

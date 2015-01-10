@@ -7,4 +7,3 @@ itsdangerous==0.24
 gunicorn
 boto
 newspaper
-python-memcached
