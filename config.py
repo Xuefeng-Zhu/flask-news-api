@@ -7,5 +7,5 @@ MONGODB_SETTINGS = {
     'password': '123123'
 }
 SECRET_KEY = 'flask is cool'
-CACHE_TYPE = 'redis'
-CACHE_REDIS_URL = 'redis://redistogo:2e2993c84376806d282fe6fbfa0daa46@mummichog.redistogo.com:10079'
+CACHE_TYPE = 'simple'
+# CACHE_REDIS_URL = 'redis://redistogo:2e2993c84376806d282fe6fbfa0daa46@mummichog.redistogo.com:10079'
