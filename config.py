@@ -7,3 +7,7 @@ MONGODB_SETTINGS = {
     'password': '123123'
 }
 SECRET_KEY = 'flask is cool'
+CACHE_TYPE = 'redis'
+CACHE_REDIS_HOST = 'pub-redis-17784.us-east-1-2.1.ec2.garantiadata.com'
+CACHE_REDIS_PORT = 17784
+CACHE_REDIS_PASSWORD = '123123'
