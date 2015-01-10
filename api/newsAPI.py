@@ -1,7 +1,8 @@
-from flask import request, abort
+from flask import request, abort, current_app
 from flask.ext.restful import Resource, reqparse
 from model.news import News
 from util.serialize import news_serialize, news_list_serialize
+from util import cache
 import boto
 import os
 
@@ -104,7 +105,6 @@ class NewsImageAPI(Resource):
         key.set_contents_from_file(uploaded_file)
 
         return {'url': 'https://s3.amazonaws.com/news-pic/%s' %uploaded_file.filename}
-
 
 class NewsListAPI(Resource):
     def get(self, tags, page):

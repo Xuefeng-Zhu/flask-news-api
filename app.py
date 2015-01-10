@@ -5,6 +5,7 @@ from model import db, redis_store
 from api.newsAPI import NewsAPI, NewsImageAPI, NewsListAPI, SearchNewsAPI
 from api.commentAPI import CommentAPI
 from api.feedAPI import ArticleAPI
+from util import cache
 
 
 app = Flask(__name__, static_url_path='')
@@ -12,6 +13,7 @@ app.config.from_object('config')
 
 db.init_app(app)
 redis_store.init_app(app)
+cache.init_app(app)
 
 api = Api(app)
 api.decorators=[cors.crossdomain(origin='*', headers='my-header, accept, content-type')]
