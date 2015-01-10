@@ -107,7 +107,7 @@ class NewsImageAPI(Resource):
         return {'url': 'https://s3.amazonaws.com/news-pic/%s' %uploaded_file.filename}
 
 class NewsListAPI(Resource):
-    @cache.cached(timeout=50)
+    # @cache.cached(timeout=50)
     def get(self, tags, page):
         if tags != 'all':
             tags = tags.split('+')
