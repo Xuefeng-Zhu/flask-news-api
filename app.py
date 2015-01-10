@@ -2,9 +2,9 @@ from flask import Flask
 from flask.ext.restful import Api
 from flask.ext.restful.utils import cors
 from model import db, redis_store
-from newsAPI import NewsAPI, NewsImageAPI, NewsListAPI, SearchNewsAPI
-from commentAPI import CommentAPI
-from feedAPI import ArticleAPI
+from api.newsAPI import NewsAPI, NewsImageAPI, NewsListAPI, SearchNewsAPI
+from api.commentAPI import CommentAPI
+from api.feedAPI import ArticleAPI
 
 
 app = Flask(__name__, static_url_path='')

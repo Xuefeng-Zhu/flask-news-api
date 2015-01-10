@@ -1,8 +1,8 @@
-from flask import request, abort, json
+from flask import abort
 from flask.ext.restful import Resource, reqparse
+from util.serialize import article_serialize
 from newspaper import Article
 import urlparse
-from serialize import article_serialize
 
 
 class ArticleAPI(Resource):

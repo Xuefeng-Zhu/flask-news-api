@@ -2,10 +2,8 @@ from flask import request, abort
 from flask.ext.restful import Resource, reqparse
 from model.news import News
 from model.comment import Comment
-from itsdangerous import (TimedJSONWebSignatureSerializer
-                          as Serializer, BadSignature, SignatureExpired)
-from serialize import comments_serialize
-from userAuth import auth_required
+from util.serialize import comments_serialize
+from util.userAuth import auth_required
 
 commnetParser = reqparse.RequestParser()
 commnetParser.add_argument('title', type=str)
