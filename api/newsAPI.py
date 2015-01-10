@@ -29,12 +29,11 @@ class NewsAPI(Resource):
         if news is not None:
             return news_serialize(news)
 
-        print "test"
         news = News.objects(title=title).exclude('comments').first()
         if news is None:
             abort(400)
         news.update(inc__news_views=1)
-        cache.set(title, news, timeout=600)
+        cache.set(title, news, timeout=60)
 
         return news_serialize(news)
 
@@ -80,6 +79,7 @@ class NewsAPI(Resource):
         news.content = content
         news.tags = tags
         news.save()
+        cache.delete(title)
 
         return news_serialize(news)
 
