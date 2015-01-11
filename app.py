@@ -2,7 +2,7 @@ from flask import Flask
 from flask.ext.restful import Api
 from flask.ext.restful.utils import cors
 from model import db, redis_store
-from api.newsAPI import NewsAPI, NewsImageAPI, NewsListAPI, SearchNewsAPI
+from api.newsAPI import NewsAPI, NewsImageAPI, NewsThumbnailAPI, NewsListAPI, SearchNewsAPI
 from api.commentAPI import CommentAPI
 from api.feedAPI import ArticleAPI
 from util import cache
@@ -20,6 +20,7 @@ api.decorators=[cors.crossdomain(origin='*', headers='my-header, accept, content
 
 api.add_resource(NewsAPI, '/news')
 api.add_resource(NewsImageAPI, '/upload_news_image')
+api.add_resource(NewsThumbnailAPI, '/upload_news_thumbnail')
 api.add_resource(NewsListAPI, '/news_list/<string:tags>/<int:page>')
 api.add_resource(SearchNewsAPI, '/search_news')
 

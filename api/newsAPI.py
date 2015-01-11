@@ -4,7 +4,10 @@ from model.news import News
 from util.serialize import news_serialize, news_list_serialize
 from util import cache
 import boto
+from PIL import Image
+from StringIO import StringIO
 import os
+
 
 
 newsParser = reqparse.RequestParser()
@@ -111,6 +114,29 @@ class NewsImageAPI(Resource):
         key.set_contents_from_file(uploaded_file)
 
         return {'url': 'https://s3.amazonaws.com/news-pic/%s' %uploaded_file.filename}
+
+class NewsThumbnailAPI(Resource):
+    def options(self):
+        pass
+
+    def post(self):
+        uploaded_file = request.files['file']
+        width = 230
+        height = 154
+        img = Image.open(uploaded_file)
+        resized_img = img.resize((width, height))
+        fp = StringIO()
+        resized_img.save(fp, 'PNG')
+        fp.seek(0)
+        filename = '_'.join([str(width), str(height), uploaded_file.filename])
+
+        conn = boto.connect_s3(os.environ['S3_KEY'], os.environ['S3_SECRET'])
+        bucket = conn.get_bucket('news-pic')
+        key = bucket.new_key(filename)
+        key.set_contents_from_file(fp)
+
+        return {'url': 'https://s3.amazonaws.com/news-pic/%s' %filename}
+
 
 class NewsListAPI(Resource):
     @cache.cached(timeout=600)
