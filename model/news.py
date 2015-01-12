@@ -12,6 +12,3 @@ class News(db.Document):
     comments = db.ListField(db.EmbeddedDocumentField(Comment))
     tags = db.ListField(db.StringField(max_length=30))
     news_views = db.IntField(default=0)
-
-
-

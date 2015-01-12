@@ -7,7 +7,8 @@ def news_serialize(news):
             result[key] = news[key].strftime("%B %d, %Y %I:%M%p")
         else:
             result[key] = news[key]
-    return result  
+    return result
+
 
 def news_list_serialize(news_list):
     result = []
@@ -18,17 +19,18 @@ def news_list_serialize(news_list):
                 pass
             elif key == 'date':
                 temp[key] = news[key].strftime("%B %d, %Y %I:%M%p")
-            elif news[key] == None:
+            elif news[key] is None:
                 temp[key] = ''
             else:
                 temp[key] = news[key]
-        temp['news_url'] = "http://xuefeng-zhu.github.io/news-client/user/#/view/%s" %news['title']
+        temp['news_url'] = "http://xuefeng-zhu.github.io/news-client\/user/#/view/%s" % news['title']
         result.append(temp)
     return result
 
+
 def comments_serialize(comments):
     result = []
-    for comment in comments: 
+    for comment in comments:
         temp = {}
         for key in comment:
             if key == 'id':
@@ -39,6 +41,7 @@ def comments_serialize(comments):
                 temp[key] = comment[key]
         result.append(temp)
     return result
+
 
 def article_serialize(article):
     result = {

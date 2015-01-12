@@ -1,4 +1,4 @@
-from flask import request, abort
+from flask import abort
 from flask.ext.restful import Resource, reqparse
 from model.news import News
 from model.comment import Comment
@@ -11,7 +11,9 @@ commnetParser.add_argument('title', type=str)
 commnetParser.add_argument('username', type=str)
 commnetParser.add_argument('content', type=str)
 
+
 class CommentAPI(Resource):
+
     @auth_required
     def get(self):
         args = commnetParser.parse_args()
@@ -42,15 +44,10 @@ class CommentAPI(Resource):
             abort(400)
 
         comment = Comment(username=username, content=content)
-        success = News.objects(title=title).only('comments').update_one(push__comments=comment)
+        success = News.objects(title=title).only(
+            'comments').update_one(push__comments=comment)
         if success is 0:
             abort(400)
         cache.delete(title + "_comment")
 
         return {'status': 'success'}
-
-
-
-
-
-

@@ -1,13 +1,13 @@
-from flask import request, abort, current_app
+from flask import request, abort
 from flask.ext.restful import Resource, reqparse
 from model.news import News
 from util.serialize import news_serialize, news_list_serialize
 from util import cache
+from util.adminAuth import auth_required
 import boto
 from PIL import Image
 from StringIO import StringIO
 import os
-
 
 
 newsParser = reqparse.RequestParser()
@@ -16,15 +16,17 @@ newsParser.add_argument('title', type=str)
 newsParser.add_argument('abstract', type=str)
 newsParser.add_argument('news_pic', type=str)
 newsParser.add_argument('content')
-  
+
+
 class NewsAPI(Resource):
+
     def options(self):
         pass
 
     def get(self):
         args = newsParser.parse_args()
         title = args['title']
-        
+
         if title is None:
             abort(400)
 
@@ -40,6 +42,7 @@ class NewsAPI(Resource):
 
         return news_serialize(news)
 
+    @auth_required
     def put(self):
         args = newsParser.parse_args()
         title = args['title']
@@ -52,7 +55,8 @@ class NewsAPI(Resource):
             abort(400)
 
         try:
-            news = News(title=title, abstract=abstract, news_pic=news_pic, content=content, tags=tags)
+            news = News(title=title, abstract=abstract,
+                        news_pic=news_pic, content=content, tags=tags)
             news.save()
         except:
             print title
@@ -60,6 +64,7 @@ class NewsAPI(Resource):
 
         return news_serialize(news)
 
+    @auth_required
     def post(self):
         args = newsParser.parse_args()
         id = args['id']
@@ -86,6 +91,7 @@ class NewsAPI(Resource):
 
         return news_serialize(news)
 
+    @auth_required
     def delete(self):
         args = newsParser.parse_args()
         id = args['id']
@@ -102,9 +108,11 @@ class NewsAPI(Resource):
 
 
 class NewsImageAPI(Resource):
+
     def options(self):
         pass
 
+    @auth_required
     def post(self):
         uploaded_file = request.files['file']
 
@@ -113,12 +121,16 @@ class NewsImageAPI(Resource):
         key = bucket.new_key(uploaded_file.filename)
         key.set_contents_from_file(uploaded_file)
 
-        return {'url': 'https://s3.amazonaws.com/news-pic/%s' %uploaded_file.filename}
+        return {'url': 'https://s3.amazonaws.com/news-pic/%s'
+                % uploaded_file.filename}
+
 
 class NewsThumbnailAPI(Resource):
+
     def options(self):
         pass
 
+    @auth_required
     def post(self):
         uploaded_file = request.files['file']
         width = 230
@@ -135,25 +147,31 @@ class NewsThumbnailAPI(Resource):
         key = bucket.new_key(filename)
         key.set_contents_from_file(fp)
 
-        return {'url': 'https://s3.amazonaws.com/news-pic/%s' %filename}
+        return {'url': 'https://s3.amazonaws.com/news-pic/%s' % filename}
 
 
 class NewsListAPI(Resource):
+
     @cache.cached(timeout=600)
     def get(self, tags, page):
         if tags != 'all':
             tags = tags.split('+')
-            news_list = News.objects(tags__all = tags).exclude('content', 'comments').order_by('-date')[10*page : 10*(page+1)]
+            news_list = News.objects(tags__all=tags).exclude(
+                'content', 'comments').order_by(
+                '-date')[10 * page: 10 * (page + 1)]
         else:
-            news_list = News.objects().exclude('content', 'comments').order_by('-date')[10*page : 10*(page+1)]
-        return news_list_serialize(news_list)  
+            news_list = News.objects().exclude('content', 'comments').order_by(
+                '-date')[10 * page: 10 * (page + 1)]
+        return news_list_serialize(news_list)
 
 
 searchParser = reqparse.RequestParser()
 searchParser.add_argument('search', type=str)
 searchParser.add_argument('page', type=int)
 
+
 class SearchNewsAPI(Resource):
+
     def options(self):
         pass
 
@@ -164,11 +182,12 @@ class SearchNewsAPI(Resource):
         page = args['page']
 
         if tags is None or len(tags) == 0:
-            news_list = News.objects().exclude('content', 'comments').order_by('-date')
+            news_list = News.objects().exclude(
+                'content', 'comments').order_by('-date')
         else:
-            news_list = News.objects(tags__all = tags).exclude('content', 'comments').order_by('-date')
+            news_list = News.objects(tags__all=tags).exclude(
+                'content', 'comments').order_by('-date')
         if search is not None and search is not '':
-            news_list = news_list.filter(title__icontains =search)
+            news_list = news_list.filter(title__icontains=search)
 
-        return news_list_serialize(news_list[10*page : 10*(page+1)])  
-
+        return news_list_serialize(news_list[10 * page: 10 * (page + 1)])
