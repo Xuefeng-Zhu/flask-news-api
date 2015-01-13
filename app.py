@@ -17,7 +17,7 @@ cache.init_app(app)
 
 api = Api(app)
 api.decorators = [cors.crossdomain(origin='*',
-                                   headers='my-header, accept, content-type', 'token')]
+                                   headers='my-header, accept, content-type, token')]
 
 api.add_resource(NewsAPI, '/news')
 api.add_resource(NewsImageAPI, '/upload_news_image')
