@@ -24,7 +24,7 @@ The API is currently deployed on Heroku
 Please fetch token through [Flask User API](https://github.com/Xuefeng-Zhu/flask-user-api) in order to use this API
 
 ## Architecture
-Flask News API stores data in mongodb. In order to access the main functionality, users need to use the token from **login** endpoint using [Flask User API](https://github.com/Xuefeng-Zhu/flask-user-api).
+Flask News API stores data in mongodb. In order to access the main functionality, users need to use the token from **login** endpoint using [Flask User API](https://github.com/Xuefeng-Zhu/flask-user-api). Each news, news list, and comments are cached in order to minimize the database look up and increast the response time.
 
 This is a list files or directories for flask user api
 
