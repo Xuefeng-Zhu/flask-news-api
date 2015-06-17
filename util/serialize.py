@@ -1,3 +1,6 @@
+import urllib
+
+
 def news_serialize(news):
     result = {}
     for key in news:
@@ -23,7 +26,7 @@ def news_list_serialize(news_list):
                 temp[key] = ''
             else:
                 temp[key] = news[key]
-        temp['news_url'] = "http://xuefeng-zhu.github.io/news-client\/user/#/view/%s" % news['title']
+        temp['news_url'] = "http://xuefeng-zhu.github.io/news-client\user/#/view/%s" % urllib.pathname2url(news['title'])
         result.append(temp)
     return result
 
