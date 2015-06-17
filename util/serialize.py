@@ -26,7 +26,7 @@ def news_list_serialize(news_list):
                 temp[key] = ''
             else:
                 temp[key] = news[key]
-        temp['news_url'] = "http://xuefeng-zhu.github.io/News-CMS\user/#/view/%s" % urllib.pathname2url(news['title'])
+        temp['news_url'] = "http://xuefeng-zhu.github.io/News-CMS/user/#/view/%s" % urllib.pathname2url(news['title'])
         result.append(temp)
     return result
 
