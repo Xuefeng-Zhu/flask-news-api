@@ -97,3 +97,6 @@ This project is built on following libraries
 + [flask-redis](https://github.com/rhyselsmore/flask-redis)
 + [Flask-RESTful](https://github.com/flask-restful/flask-restful)
 + [gunicorn](https://github.com/benoitc/gunicorn)
+
+## Licence
+MIT
